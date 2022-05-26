@@ -1,65 +1,45 @@
 <template>
-		<section class="vue-winwheel">
-			<div class="mobile-container">
-				<div class="wheel-wrapper">
-					<div class="canvas-wrapper">
-						<canvas id="canvas" width="310" height="310">
-							<p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try Google Chrome.</p>
-						</canvas>
-					</div>
-					<div class="button-wrapper">
-						<a class="btn btn-play" href="#" @click.prevent="startSpin()" v-if="!loadingPrize && !wheelSpinning">SPIN!</a>
-					</div>
-				</div>
-			</div>
-			<div class="custom-modal modal-mask" id="modalSpinwheel" v-if="modalPrize">
-				<div slot="body">
-					<a href="" @click.prevent="hidePrize()" class="modal-dismiss">
-						<i class="icon_close"></i>
-					</a>
-					<h2>
-						Yay you somehting the prize!!
-					</h2>
-					<h1> {{prizeName}}</h1>
-				</div>
-			</div>
-		</section>
+  <section class="vue-winwheel">
+    <div v-if="selectedPlayers.length > 0">
+      <div class="mobile-container">
+        <div class="wheel-wrapper">
+          <div class="canvas-wrapper">
+            <canvas id="canvas" width="310" height="310">
+              <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try Google Chrome.</p>
+            </canvas>
+          </div>
+          <div class="button-wrapper">
+            <a class="btn btn-play" href="#" @click.prevent="startSpin()" v-if="!loadingPrize && !wheelSpinning">SPIN!</a>
+          </div>
+        </div>
+      </div>
+      <div class="custom-modal modal-mask" id="modalSpinwheel" v-if="modalPrize">
+        <div slot="body">
+          <a href="" @click.prevent="hidePrize()" class="modal-dismiss">
+            <i class="icon_close"></i>
+          </a>
+          <h2>
+            Yay you {{prizeName}} is the speaker
+          </h2>
+          <h1> {{prizeName}}</h1>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      Ya aucune joueur frero !
+    </div>
+  </section>
 </template>
 
 
 <script>
+import { mapState } from 'vuex';
 import * as Winwheel from '../../../javascript/Winwheel'
+
+const defaultColors = ['#fff', '#c4376f', '#000'];
 
 export default {
   name: 'WheelComponent',
-  props:{
-		segments:{
-			default(){
-				return [
-					{
-						textFillStyle: '#fff',
-						fillStyle: '#000',
-						text:'Camille'
-					},
-					{
-						textFillStyle: '#000',
-						fillStyle: '#FFF',
-						text:'Maxime'
-					},
-					{
-						textFillStyle: '#fff',
-						fillStyle: '#000',
-						text:'Matteo'
-					},
-					{
-						textFillStyle: '#000',
-						fillStyle: '#FFF',
-						text:'Daniela'
-					},
-				]
-			}
-		}
-  },
   data () {
     return {
       loadingPrize: false,
@@ -93,8 +73,8 @@ export default {
         this.wheelSpinning = true
         this.theWheel = new Winwheel.Winwheel({
           ...this.WinWheelOptions,
-          numSegments: this.segments.length,
-          segments: this.segments,
+          numSegments: this.selectedPlayers.length,
+          segments: this.selectedPlayers,
           animation: {
             type: 'spinToStop',
             duration: 2,
@@ -106,8 +86,8 @@ export default {
         // example input prize number get from Backend
         // Important thing is to set the stopAngle of the animation before stating the spin.
 
-        var prizeNumber = Math.floor(Math.random() * this.segments.length) // or just get from Backend
-        var stopAt = 360 / this.segments.length * prizeNumber - 360 / this.segments.length / 2 // center pin
+        var prizeNumber = Math.floor(Math.random() * this.selectedPlayers.length) // or just get from Backend
+        var stopAt = 360 / this.selectedPlayers.length * prizeNumber - 360 / this.selectedPlayers.length / 2 // center pin
         // var stopAt = 360 / this.segments.length * prizeNumber - Math.floor(Math.random() * 60) //random location
         this.theWheel.animation.stopAngle = stopAt
         this.theWheel.animation.callbackSound = () => {
@@ -120,8 +100,8 @@ export default {
     resetWheel () {
       this.theWheel = new Winwheel.Winwheel({
         ...this.WinWheelOptions,
-        numSegments: this.segments.length,
-        segments: this.segments
+        numSegments: this.selectedPlayers.length,
+        segments: this.selectedPlayers
       })
 
       if (this.wheelSpinning) {
@@ -145,7 +125,23 @@ export default {
       return;
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['players']),
+    selectedPlayers() {
+      return this.players.map((player, i) => {
+        return {
+          textFillStyle: i % 2 == 0 ? defaultColors[0] : defaultColors[this.players.length % 2 ? 1 : 2],
+          fillStyle: i % 2 == 0 ? defaultColors[1] : defaultColors[0],
+          text: player,
+        }
+      });
+    },
+  },
+  watch: {
+    players() {
+      this.resetWheel()
+    },
+  },
   updated () {},
   mounted () {
     this.initSpin()
