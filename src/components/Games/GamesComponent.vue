@@ -1,20 +1,20 @@
 <template>
   <div id="app">
-    <GamesComponent/>
+    <WheelComponent/>
+    <NameChooser/>
   </div>
 </template>
 
 <script>
-import GamesComponent from './components/Games/GamesComponent';
-export default {
-  name: 'App',
-  components: {
-    GamesComponent,
-  }
+import WheelComponent from './Wheel/WheelComponent.vue'
+import NameChooser from './NameChooser.vue'
 
-  // mounted() {
-  //   this.$router.push('/choose');
-  // },
+export default {
+  name: 'GamesComponent',
+  components: {
+    WheelComponent,
+    NameChooser
+  }
 }
 </script>
 
