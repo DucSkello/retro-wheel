@@ -2083,7 +2083,6 @@ function winwheelTriggerSound() {
 	if (currentTriggerNumber != winwheelToDrawDuringAnimation._lastSoundTriggerNumber) {
 		// If the property is a function then call it, otherwise eval the proptery as javascript code.
 		if (typeof callbackSound === 'function') {
-      console.log("salut les p'tites putes");
 			callbackSound()
 		} else {
 			eval(callbackSound)

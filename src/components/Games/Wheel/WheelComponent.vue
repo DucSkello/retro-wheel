@@ -19,27 +19,30 @@
             <i class="icon_close"></i>
           </a>
           <h2>
-            Yay you {{prizeName}} is the speaker
+            Yay ! {{prizeName}} is the speaker.
           </h2>
-          <h1> {{prizeName}}</h1>
         </div>
       </div>
     </div>
     <div v-else>
-      Ya aucune joueur frero !
+      Aucun joueur de sélectionné
     </div>
   </section>
 </template>
 
 
 <script>
-import { mapState } from 'vuex';
 import * as Winwheel from '../../../javascript/Winwheel'
 
-const defaultColors = ['#fff', '#c4376f', '#000'];
 
 export default {
   name: 'WheelComponent',
+  props: {
+    selectedPlayers: {
+      type: Array,
+      default: new Array(),
+    }
+  },
   data () {
     return {
       loadingPrize: false,
@@ -82,7 +85,6 @@ export default {
             callbackFinished: this.onFinishSpin
           }
         })
-
         // example input prize number get from Backend
         // Important thing is to set the stopAngle of the animation before stating the spin.
 
@@ -101,7 +103,12 @@ export default {
       this.theWheel = new Winwheel.Winwheel({
         ...this.WinWheelOptions,
         numSegments: this.selectedPlayers.length,
-        segments: this.selectedPlayers
+        segments: this.selectedPlayers,
+        animation: {
+          type: 'spinToStop',
+          duration: 2,
+          spins: 10,
+        }
       })
 
       if (this.wheelSpinning) {
@@ -126,25 +133,17 @@ export default {
     }
   },
   computed: {
-    ...mapState(['players']),
-    selectedPlayers() {
-      return this.players.map((player, i) => {
-        return {
-          textFillStyle: i % 2 == 0 ? defaultColors[0] : defaultColors[this.players.length % 2 ? 1 : 2],
-          fillStyle: i % 2 == 0 ? defaultColors[1] : defaultColors[0],
-          text: player,
-        }
-      });
-    },
+    
   },
   watch: {
-    players() {
+    selectedPlayers() {
+      this.hidePrize()
       this.resetWheel()
     },
   },
   updated () {},
   mounted () {
-    this.initSpin()
+    this.resetWheel()
   },
   created () {}
 }

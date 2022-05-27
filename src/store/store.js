@@ -9,7 +9,12 @@ const state = {
 
 const mutations = {
   ADD_PLAYERS (state, newValue) {
-    state.players.push(newValue);
+    const uniqId = Date.now();
+    const player = {
+      uniqId,
+      name: newValue,
+    }
+    state.players.push(player);
   },
 }
 
