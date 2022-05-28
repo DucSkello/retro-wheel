@@ -41,14 +41,14 @@ import { mapState } from 'vuex'
 const defaultColors = [
   {
     textFillStyle: '#fff',
-    fillStyle: '#000',
+    fillStyle: '#267257',
   },
   {
     textFillStyle: '#fff',
-    fillStyle: '#c4376f',
+    fillStyle: '#2A4D6F',
   },
   {
-    textFillStyle: '#000',
+    textFillStyle: '#2A4D6F',
     fillStyle: '#fff',
   },
 ]
@@ -193,7 +193,7 @@ export default {
 	background-repeat: no-repeat;
 }
 .vue-winwheel h1 {
-	color: #b32656;
+	color: #2A4D6F;
 	font-family: 'Avenir', Helvetica, Arial, sans-serif;
 	font-size: 36px;
 	line-height: 90px;
@@ -209,7 +209,7 @@ export default {
 }
 .vue-winwheel #modalSpinwheel.custom-modal .content-wrapper .content h2 {
 	text-transform: uppercase;
-	color: #b32656;
+	color: #2A4D6F;
 	margin-bottom: 16px;
 	margin-top: 0;
 	font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -233,7 +233,7 @@ export default {
 }
 .vue-winwheel #modalSpinwheel.custom-modal .content-wrapper .content .modal-dismiss i.icon_close {
 	font-size: 30px;
-	color: #da2a52;
+	color: #2A4D6F;
 }
 .vue-winwheel canvas#canvas {
 	position: relative;
@@ -245,7 +245,7 @@ export default {
 	content: '';
 	display: block;
 	width: 42px;
-	background: #000;
+	background: #2A4D6F;
 	height: 42px;
 	position: absolute;
 	left: calc(50% - 26px);
@@ -259,7 +259,7 @@ export default {
 	content: '';
 	display: block;
 	width: 310px;
-	background: #0f0f0f;
+	background: #2A4D6F;
 	height: 310px;
 	position: absolute;
 	left: 0;
@@ -281,10 +281,11 @@ export default {
 	right: 0;
 	display: block;
 	z-index: 99999;
-	background-image: url('../../../assets/flat-black-marker.png');
+	background-image: url('../../../assets/flat-black-marker-2.png');
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
+  filter: grayscale(60%);
 }
 .vue-winwheel .wheel-wrapper .button-wrapper {
 	margin: 0 auto;
@@ -297,7 +298,7 @@ export default {
 }
 .vue-winwheel .wheel-wrapper .btn.btn-play {
 	padding: 0 58px !important;
-	background: #c4376f;
+	background: #2A4D6F;
 	height: 40px;
 	line-height: 40px;
 	color: white;
