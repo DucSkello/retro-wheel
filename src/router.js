@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 import App from './App';
 import GamesComponent from './components/Games/GamesComponent'
 
-export const router = new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
@@ -14,3 +14,5 @@ export const router = new VueRouter({
     { path: '/choose', component: GamesComponent }
   ]
 });
+
+export default router;
