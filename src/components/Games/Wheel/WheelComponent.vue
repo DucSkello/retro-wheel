@@ -1,6 +1,7 @@
 <template>
   <section class="vue-winwheel">
-    <div v-if="selectedPlayers.length > 0">
+  <div class="bg-white shadow-md rounded px-8 pt-4 pb-8 mb-4">
+    <div v-if="formattedPlayers.length > 0">
       <div class="mobile-container">
         <div class="wheel-wrapper">
           <div class="canvas-wrapper">
@@ -24,8 +25,9 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      Aucun joueur de sélectionné
+      <div class="px-8 pt-6 pb-8 mb-4" v-else>
+        Aucun joueur de sélectionné
+      </div>
     </div>
   </section>
 </template>
@@ -33,16 +35,27 @@
 
 <script>
 import * as Winwheel from '../../../javascript/Winwheel'
+import { mapState } from 'vuex'
+
+const defaultColors = [
+  {
+    textFillStyle: '#fff',
+    fillStyle: '#000',
+  },
+  {
+    textFillStyle: '#fff',
+    fillStyle: '#c4376f',
+  },
+  {
+    textFillStyle: '#000',
+    fillStyle: '#fff',
+  },
+]
+
 
 
 export default {
   name: 'WheelComponent',
-  props: {
-    selectedPlayers: {
-      type: Array,
-      default: new Array(),
-    }
-  },
   data () {
     return {
       loadingPrize: false,
@@ -76,8 +89,8 @@ export default {
         this.wheelSpinning = true
         this.theWheel = new Winwheel.Winwheel({
           ...this.WinWheelOptions,
-          numSegments: this.selectedPlayers.length,
-          segments: this.selectedPlayers,
+          numSegments: this.formattedPlayers.length,
+          segments: this.formattedPlayers,
           animation: {
             type: 'spinToStop',
             duration: 2,
@@ -88,8 +101,8 @@ export default {
         // example input prize number get from Backend
         // Important thing is to set the stopAngle of the animation before stating the spin.
 
-        var prizeNumber = Math.floor(Math.random() * this.selectedPlayers.length) // or just get from Backend
-        var stopAt = 360 / this.selectedPlayers.length * prizeNumber - 360 / this.selectedPlayers.length / 2 // center pin
+        var prizeNumber = Math.floor(Math.random() * this.formattedPlayers.length) // or just get from Backend
+        var stopAt = 360 / this.formattedPlayers.length * prizeNumber - 360 / this.formattedPlayers.length / 2 // center pin
         // var stopAt = 360 / this.segments.length * prizeNumber - Math.floor(Math.random() * 60) //random location
         this.theWheel.animation.stopAngle = stopAt
         this.theWheel.animation.callbackSound = () => {
@@ -99,11 +112,21 @@ export default {
         this.wheelSpinning = false
       }
     },
+    formatColors(index) {
+      let desiredIndex = 0;
+      for (let i = 3; i >= 1; i--) {
+        if (index % i === 0) {
+          desiredIndex = i - 1;
+          break
+        }
+      }
+      return defaultColors[desiredIndex];
+    },
     resetWheel () {
       this.theWheel = new Winwheel.Winwheel({
         ...this.WinWheelOptions,
-        numSegments: this.selectedPlayers.length,
-        segments: this.selectedPlayers,
+        numSegments: this.formattedPlayers.length,
+        segments: this.formattedPlayers,
         animation: {
           type: 'spinToStop',
           duration: 2,
@@ -133,25 +156,37 @@ export default {
     }
   },
   computed: {
-    
-  },
-  watch: {
-    selectedPlayers() {
-      this.hidePrize()
-      this.resetWheel()
+    ...mapState(['players']),
+    formattedPlayers() {
+      if (this.players.length === 0) return [];
+
+      return this.players
+        .filter(player => player.displayed)
+        .map((player, i) => {
+          return {
+            ...this.formatColors(i),
+            text: player.name,
+            uniqId: player.uniqId,
+            displayed: player.displayed,
+          }
+      });
     },
   },
-  updated () {},
+  watch: {
+    formattedPlayers() {
+      this.resetWheel();
+    }
+  },
   mounted () {
     this.resetWheel()
   },
-  created () {}
 }
 
 </script>
 
 <style scoped>
 .vue-winwheel {
+  position: fixed;
 	text-align: center;
 	background-image: none;
 	background-size: cover;
