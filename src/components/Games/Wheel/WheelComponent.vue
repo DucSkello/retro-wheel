@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-      <div class="custom-modal modal-mask" id="modalSpinwheel" v-if="modalPrize">
+      <div class="custom-modal modal-mask" id="modalSpinwheel" v-if="winningPlayer">
         <div slot="body">
           <a href="" @click.prevent="hidePrize()" class="modal-dismiss">
             <i class="icon_close"></i>
@@ -30,6 +30,7 @@
       </div>
     </div>
   </section>
+
 </template>
 
 
@@ -60,10 +61,8 @@ export default {
     return {
       loadingPrize: false,
       theWheel: null,
-      modalPrize: false,
-      wheelPower: 1,
+      winningPlayer: false,
       wheelSpinning: false,
-      prizeName: 'BUY 1 GET 1',
       WinWheelOptions: {
         textFontSize: 14,
         outterRadius: 410,
@@ -78,10 +77,10 @@ export default {
   },
   methods: {
     showPrize () {
-      this.modalPrize = true
+      this.winningPlayer = true
     },
     hidePrize () {
-      this.modalPrize = false
+      this.winningPlayer = false
     },
     startSpin () {
       if (this.wheelSpinning === false) {
@@ -249,10 +248,10 @@ export default {
 	background: #000;
 	height: 42px;
 	position: absolute;
-	left: calc(50% - 25px);
+	left: calc(50% - 26px);
 	margin: auto;
 	border-radius: 100%;
-	top: calc(50% - 29px);
+	top: calc(50% - 26px);
 	border: 5px solid white;
 	box-sizing: content-box;
 }
@@ -282,7 +281,7 @@ export default {
 	right: 0;
 	display: block;
 	z-index: 99999;
-	background-image: url('../../../assets/spinner-marker.svg');
+	background-image: url('../../../assets/flat-black-marker.png');
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;

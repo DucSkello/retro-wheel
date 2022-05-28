@@ -1,20 +1,22 @@
 <template>
-  <div id="app">
-    <GamesComponent/>
+  <div>
+    <NavbarComponent/>
+
+    <div id="app">
+      <GamesComponent/>
+    </div>
   </div>
 </template>
 
 <script>
 import GamesComponent from './components/Games/GamesComponent';
+import NavbarComponent from './components/NavbarComponent.vue';
 export default {
   name: 'App',
   components: {
     GamesComponent,
+    NavbarComponent
   }
-
-  // mounted() {
-  //   this.$router.push('/choose');
-  // },
 }
 </script>
 
@@ -25,6 +27,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
