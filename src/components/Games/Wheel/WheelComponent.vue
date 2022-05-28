@@ -83,6 +83,7 @@ export default {
       this.winningPlayer = false
     },
     startSpin () {
+      this.hidePrize();
       if (this.wheelSpinning === false) {
         this.theWheel.startAnimation()
         this.wheelSpinning = true
@@ -174,6 +175,7 @@ export default {
   watch: {
     formattedPlayers() {
       this.resetWheel();
+      this.hidePrize();
     }
   },
   mounted () {
